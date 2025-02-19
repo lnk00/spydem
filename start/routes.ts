@@ -12,5 +12,6 @@ const DashboardController = () => import('#controllers/dashboard_controller')
 const AuthController = () => import('#controllers/auth_controller')
 
 router.get('/', [DashboardController, 'index'])
-router.get('/auth/signin', [AuthController, 'signin'])
-router.get('/auth/register', [AuthController, 'register'])
+router.get('/auth/signin', [AuthController, 'render_signin'])
+router.get('/auth/register', [AuthController, 'render_register'])
+router.post('/auth/register', [AuthController, 'register'])

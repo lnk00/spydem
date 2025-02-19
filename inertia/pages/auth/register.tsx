@@ -1,37 +1,78 @@
-import { Head } from '@inertiajs/react'
+import { Head, router } from '@inertiajs/react'
+import { FormEvent, useState } from 'react'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 
 export default function Register() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirm, setConfirm] = useState('')
+  const [error, setError] = useState(false)
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault()
+    if (password === confirm) {
+      router.post('/auth/register', { email, password, confirm })
+    } else {
+      setError(true)
+    }
+  }
+
   return (
     <>
       <Head title="Register" />
       <div className="flex items-center justify-center w-screen h-screen">
         <div className="flex flex-col gap-6 max-w-[450px] mx-auto">
           <img src="/images/logo.svg" className="h-10" />
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center gap-2">
                 <h1 className="text-xl font-bold">Welcome to spydem</h1>
                 <div className="text-center text-sm">
-                  Don&apos;t have an account?{' '}
+                  Already have an account?{' '}
                   <a href="#" className="underline underline-offset-4">
-                    Sign up
+                    Sign in
                   </a>
                 </div>
               </div>
               <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" placeholder="m@example.com" required />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="m@example.com"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="email">Password</Label>
-                  <Input id="password" type="password" placeholder="************" required />
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="************"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="email">Confirm password</Label>
+                  <Input
+                    id="confirm-password"
+                    type="password"
+                    placeholder="************"
+                    required
+                    value={confirm}
+                    onChange={(e) => setConfirm(e.target.value)}
+                    className={error ? 'border-red-400' : ''}
+                  />
                 </div>
                 <Button type="submit" className="w-full">
-                  Login
+                  Register
                 </Button>
               </div>
               <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
