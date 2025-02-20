@@ -1,15 +1,17 @@
 import { Button } from '@heroui/react';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/' as never)({
-  component: Home,
+  component: RouteComponent,
 });
 
-function Home() {
+function RouteComponent() {
   return (
     <div>
-      <h1></h1>
-      <Button>Click me</Button>
+      <h1>Home</h1>
+      <Link to="/signup">
+        <Button>Click me</Button>
+      </Link>
     </div>
   );
 }
