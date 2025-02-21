@@ -1,12 +1,4 @@
-import {
-  Button,
-  Card,
-  CardBody,
-  Divider,
-  Form,
-  Image,
-  Link,
-} from '@heroui/react';
+import { Button, Card, CardBody, Form, Image, Link } from '@heroui/react';
 import { createFileRoute } from '@tanstack/react-router';
 import { ArrowLeftIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -40,6 +32,7 @@ function RouteComponent() {
       console.log('Form submitted', e);
     }
   };
+
   return (
     <div className="container mx-auto h-screen flex items-center justify-center">
       <Card className="p-4">
@@ -77,9 +70,9 @@ function RouteComponent() {
               </p>
             </motion.div>
           </div>
-          <Form className="w-96" onSubmit={onSubmit}>
-            <AnimatePresence mode="wait" initial={false}>
-              {step === 1 ? (
+          <Form className="w-96 relative" onSubmit={onSubmit}>
+            <AnimatePresence mode="popLayout" initial={false}>
+              {step === 1 && (
                 <EmailFormComponent
                   animationKey="step1"
                   errorMessage="Please enter a valide email"
@@ -88,7 +81,8 @@ function RouteComponent() {
                   name="email"
                   buttonLabel="Continue with email"
                 />
-              ) : step === 2 ? (
+              )}
+              {step === 2 && (
                 <PasswordFormComponent
                   animationKey="step2"
                   errorMessage="Please enter a strong password"
@@ -97,7 +91,8 @@ function RouteComponent() {
                   name="password"
                   buttonLabel="Validate password"
                 />
-              ) : (
+              )}
+              {step === 3 && (
                 <PasswordFormComponent
                   animationKey="step3"
                   errorMessage="Please enter the same password"
