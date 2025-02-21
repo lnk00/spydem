@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as SignupImport } from './routes/signup'
+import { Route as SigninImport } from './routes/signin'
 import { Route as ProtectedImport } from './routes/_protected'
 import { Route as ProtectedIndexImport } from './routes/_protected/index'
 
@@ -20,6 +21,12 @@ import { Route as ProtectedIndexImport } from './routes/_protected/index'
 const SignupRoute = SignupImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SigninRoute = SigninImport.update({
+  id: '/signin',
+  path: '/signin',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -43,6 +50,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof ProtectedImport
+      parentRoute: typeof rootRoute
+    }
+    '/signin': {
+      id: '/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof SigninImport
       parentRoute: typeof rootRoute
     }
     '/signup': {
@@ -78,11 +92,13 @@ const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
 
 export interface FileRoutesByFullPath {
   '': typeof ProtectedRouteWithChildren
+  '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/': typeof ProtectedIndexRoute
 }
 
 export interface FileRoutesByTo {
+  '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/': typeof ProtectedIndexRoute
 }
@@ -90,26 +106,29 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_protected': typeof ProtectedRouteWithChildren
+  '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/_protected/': typeof ProtectedIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/signup' | '/'
+  fullPaths: '' | '/signin' | '/signup' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/signup' | '/'
-  id: '__root__' | '/_protected' | '/signup' | '/_protected/'
+  to: '/signin' | '/signup' | '/'
+  id: '__root__' | '/_protected' | '/signin' | '/signup' | '/_protected/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   ProtectedRoute: typeof ProtectedRouteWithChildren
+  SigninRoute: typeof SigninRoute
   SignupRoute: typeof SignupRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   ProtectedRoute: ProtectedRouteWithChildren,
+  SigninRoute: SigninRoute,
   SignupRoute: SignupRoute,
 }
 
@@ -124,6 +143,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/_protected",
+        "/signin",
         "/signup"
       ]
     },
@@ -132,6 +152,9 @@ export const routeTree = rootRoute
       "children": [
         "/_protected/"
       ]
+    },
+    "/signin": {
+      "filePath": "signin.tsx"
     },
     "/signup": {
       "filePath": "signup.tsx"

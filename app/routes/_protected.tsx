@@ -16,7 +16,7 @@ export const Route = createFileRoute('/_protected')({
     const session = await getSession();
     if (!session) {
       throw redirect({
-        to: '/signup',
+        to: '/signin',
         search: {
           redirect: location.href,
         },

@@ -17,7 +17,7 @@ import PasswordFormComponent from '~/components/password-form.component';
 import DividerFormComponent from '~/components/divider-form.component';
 import { authClient } from '~/lib/auth-client';
 
-export const Route = createFileRoute('/signup')({
+export const Route = createFileRoute('/signin')({
   component: RouteComponent,
 });
 
@@ -25,7 +25,6 @@ function RouteComponent() {
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirm, setConfirm] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate({ from: '/signup' });
 
@@ -39,14 +38,11 @@ function RouteComponent() {
     e.preventDefault();
     if (step === 1) {
       setStep(2);
-    } else if (step === 2) {
-      setStep(3);
     } else {
-      await authClient.signUp.email(
+      await authClient.signIn.email(
         {
           email,
           password,
-          name: '',
         },
         {
           onRequest: (_ctx) => {
@@ -58,13 +54,11 @@ function RouteComponent() {
           },
           onError: (_ctx) => {
             addToast({
-              title: 'Sign up error',
-              description:
-                'You account is not created, if your already have an account go to sign in page.',
+              title: 'Sign in error',
+              description: `We could not sign you in, if you don't already have an account go to sign up page.`,
               color: 'danger',
             });
             setPassword('');
-            setConfirm('');
             setEmail('');
             setStep(1);
             setIsLoading(false);
@@ -105,9 +99,9 @@ function RouteComponent() {
               }}
               transition={{ duration: 0.2 }}
             >
-              <h1 className="text-xl font-semibold">Sign Up</h1>
+              <h1 className="text-xl font-semibold">Sign In</h1>
               <p className="text-small text-default-500">
-                to create your spydem account
+                to sign into your spydem account
               </p>
             </motion.div>
           </div>
@@ -128,38 +122,13 @@ function RouteComponent() {
               {step === 2 && (
                 <PasswordFormComponent
                   animationKey="step2"
-                  description="Enter a strong password"
+                  description="Enter your password"
                   label="Password"
                   name="password"
-                  buttonLabel="Validate password"
+                  buttonLabel="Sign in"
                   value={password}
                   onChange={(value) => setPassword(value)}
-                  validate={(value) => {
-                    if (value.length < 8) {
-                      return 'Password must be at least 8 characters long.';
-                    } else if (value.length > 35) {
-                      return 'Password must be less than 35 characters long.';
-                    }
-                    return null;
-                  }}
-                />
-              )}
-              {step === 3 && (
-                <PasswordFormComponent
-                  animationKey="step3"
-                  description="Confirm your password"
-                  label="Confirm password"
-                  name="confirm-password"
-                  buttonLabel="Create account"
-                  value={confirm}
-                  onChange={(value) => setConfirm(value)}
                   isLoading={isLoading}
-                  validate={(value) => {
-                    if (value !== password) {
-                      return 'Confirm password must match your password.';
-                    }
-                    return null;
-                  }}
                 />
               )}
             </AnimatePresence>
@@ -175,13 +144,13 @@ function RouteComponent() {
             </Button>
           </div>
           <p className="text-center text-small">
-            Already have an account ?
+            Don't have an account ?
             <Link
-              onPress={() => navigate({ to: '/signin' })}
+              onPress={() => navigate({ to: '/signup' })}
               size="sm"
               className="ml-1"
             >
-              Sign In
+              Sign Up
             </Link>
           </p>
         </CardBody>

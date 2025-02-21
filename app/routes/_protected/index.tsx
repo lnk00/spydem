@@ -1,5 +1,5 @@
 import { Button } from '@heroui/react';
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { authClient } from '~/lib/auth-client';
 
 export const Route = createFileRoute('/' as never)({
@@ -13,7 +13,7 @@ function RouteComponent() {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          navigate({ to: '/signup' });
+          navigate({ to: '/signin' });
         },
       },
     });
@@ -22,9 +22,7 @@ function RouteComponent() {
   return (
     <div>
       <h1>Home</h1>
-      <Link to="/signup">
-        <Button onPress={handleSignout}>Sign out</Button>
-      </Link>
+      <Button onPress={handleSignout}>Sign out</Button>
     </div>
   );
 }
