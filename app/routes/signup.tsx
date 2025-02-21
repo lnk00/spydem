@@ -7,12 +7,7 @@ import GoogleLogo from '~/assets/images/google-logo.svg';
 import EmailFormComponent from '~/components/email-form.component';
 import PasswordFormComponent from '~/components/password-form.component';
 import DividerFormComponent from '~/components/divider-form.component';
-import { createServerFn } from '@tanstack/start';
-
-export const registerUser = createServerFn().handler(async () => {
-  console.log('server function called');
-  return new Date().toISOString();
-});
+import { authClient } from '~/lib/auth-client';
 
 export const Route = createFileRoute('/signup')({
   component: RouteComponent,
@@ -34,8 +29,26 @@ function RouteComponent() {
     } else if (step === 2) {
       setStep(3);
     } else {
-      const res = await registerUser();
-      console.log('Form submitted', res);
+      await authClient.signUp.email(
+        {
+          email: 'damien.dumontet.perso@gmail.com',
+          password: 'password',
+          name: 'Damien Dumontet',
+          callbackURL: '/',
+        },
+        {
+          onRequest: (_ctx) => {
+            console.log('AUTH STARTED');
+          },
+          onSuccess: (_ctx) => {
+            console.log('AUTH SUCCEED');
+            //redirect to the dashboard or sign in page
+          },
+          onError: (ctx) => {
+            console.log('AUTH ERROR: ', ctx.error);
+          },
+        },
+      );
     }
   };
 
