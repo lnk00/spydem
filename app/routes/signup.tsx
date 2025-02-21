@@ -7,6 +7,12 @@ import GoogleLogo from '~/assets/images/google-logo.svg';
 import EmailFormComponent from '~/components/email-form.component';
 import PasswordFormComponent from '~/components/password-form.component';
 import DividerFormComponent from '~/components/divider-form.component';
+import { createServerFn } from '@tanstack/start';
+
+export const registerUser = createServerFn().handler(async () => {
+  console.log('server function called');
+  return new Date().toISOString();
+});
 
 export const Route = createFileRoute('/signup')({
   component: RouteComponent,
@@ -21,15 +27,15 @@ function RouteComponent() {
     }
   };
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (step === 1) {
       setStep(2);
     } else if (step === 2) {
       setStep(3);
     } else {
-      // Handle final form submission
-      console.log('Form submitted', e);
+      const res = await registerUser();
+      console.log('Form submitted', res);
     }
   };
 
