@@ -4,19 +4,15 @@ import {
   CardBody,
   Divider,
   Form,
+  Image,
   Input,
   Link,
 } from '@heroui/react';
 import { createFileRoute } from '@tanstack/react-router';
-import {
-  BadgeCentIcon,
-  BoxesIcon,
-  EyeIcon,
-  EyeOffIcon,
-  ArrowLeftIcon,
-} from 'lucide-react';
+import { EyeIcon, EyeOffIcon, ArrowLeftIcon } from 'lucide-react';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import GoogleLogo from '../assets/images/google-logo.svg';
 
 export const Route = createFileRoute('/signup')({
   component: RouteComponent,
@@ -24,11 +20,6 @@ export const Route = createFileRoute('/signup')({
 
 function RouteComponent() {
   const [step, setStep] = useState(1);
-  const [isPassVisible, setIsPassVisible] = useState(false);
-  const [isConfirmVisible, setIsConfirmVisible] = useState(false);
-
-  const togglePasswordVisibility = () => setIsPassVisible(!isPassVisible);
-  const toggleConfirmVisibility = () => setIsConfirmVisible(!isConfirmVisible);
 
   const handleBack = () => {
     if (step > 1) {
@@ -44,7 +35,7 @@ function RouteComponent() {
       setStep(3);
     } else {
       // Handle final form submission
-      console.log('Form submitted');
+      console.log('Form submitted', e);
     }
   };
   return (
@@ -87,98 +78,11 @@ function RouteComponent() {
           <Form className="w-96" onSubmit={onSubmit}>
             <AnimatePresence mode="wait">
               {step === 1 ? (
-                <motion.div
-                  key="step1"
-                  initial={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -100 }}
-                  transition={{ duration: 0.3 }}
-                  className="flex flex-col gap-2 w-full"
-                >
-                  <Input
-                    isRequired
-                    errorMessage="Please enter a valid email"
-                    label="Email"
-                    labelPlacement="inside"
-                    description="Enter your email"
-                    name="email"
-                    type="email"
-                  />
-                  <Button fullWidth size="lg" type="submit" color="primary">
-                    Continue with email
-                  </Button>
-                </motion.div>
+                <EmailComponent />
               ) : step === 2 ? (
-                <motion.div
-                  key="step2"
-                  initial={{ opacity: 0, x: 100 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="flex flex-col gap-2 w-full"
-                >
-                  <Input
-                    isRequired
-                    errorMessage="Please enter a strong password"
-                    label="Password"
-                    labelPlacement="inside"
-                    description="Enter a strong password"
-                    name="password"
-                    type={isPassVisible ? 'text' : 'password'}
-                    autoFocus={true}
-                    endContent={
-                      <button
-                        aria-label="toggle password visibility"
-                        className="focus:outline-none"
-                        type="button"
-                        onClick={togglePasswordVisibility}
-                      >
-                        {isPassVisible ? (
-                          <EyeOffIcon className="text-2xl text-default-400 pointer-events-none" />
-                        ) : (
-                          <EyeIcon className="text-2xl text-default-400 pointer-events-none" />
-                        )}
-                      </button>
-                    }
-                  />
-                  <Button fullWidth size="lg" type="submit" color="primary">
-                    Sign up
-                  </Button>
-                </motion.div>
+                <PasswordComponent />
               ) : (
-                <motion.div
-                  key="step3"
-                  initial={{ opacity: 0, x: 100 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="flex flex-col gap-2 w-full"
-                >
-                  <Input
-                    isRequired
-                    errorMessage="Please enter the same password"
-                    label="Confirm password"
-                    labelPlacement="inside"
-                    description="Confirm your password"
-                    name="confirm-password"
-                    type={isConfirmVisible ? 'text' : 'password'}
-                    autoFocus={true}
-                    endContent={
-                      <button
-                        aria-label="toggle password visibility"
-                        className="focus:outline-none"
-                        type="button"
-                        onClick={toggleConfirmVisibility}
-                      >
-                        {isConfirmVisible ? (
-                          <EyeOffIcon className="text-2xl text-default-400 pointer-events-none" />
-                        ) : (
-                          <EyeIcon className="text-2xl text-default-400 pointer-events-none" />
-                        )}
-                      </button>
-                    }
-                  />
-                  <Button fullWidth size="lg" type="submit" color="primary">
-                    Create account
-                  </Button>
-                </motion.div>
+                <ConfirmPasswordComponent />
               )}
             </AnimatePresence>
           </Form>
@@ -188,7 +92,11 @@ function RouteComponent() {
             <Divider className="flex-1" />
           </div>
           <div className="flex flex-col gap-2">
-            <Button startContent={<BoxesIcon size={24} />} variant="bordered">
+            <Button
+              startContent={<Image src={GoogleLogo} width={20} />}
+              variant="flat"
+              size="lg"
+            >
               Continue with Google
             </Button>
           </div>
@@ -201,5 +109,116 @@ function RouteComponent() {
         </CardBody>
       </Card>
     </div>
+  );
+}
+
+function EmailComponent() {
+  return (
+    <motion.div
+      key="step1"
+      initial={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -100 }}
+      transition={{ duration: 0.3 }}
+      className="flex flex-col gap-2 w-full"
+    >
+      <Input
+        isRequired
+        errorMessage="Please enter a valid email"
+        label="Email"
+        labelPlacement="inside"
+        description="Enter your email"
+        name="email"
+        type="email"
+      />
+      <Button fullWidth size="lg" type="submit" color="primary">
+        Continue with email
+      </Button>
+    </motion.div>
+  );
+}
+
+function PasswordComponent() {
+  const [isPassVisible, setIsPassVisible] = useState(false);
+
+  const togglePasswordVisibility = () => setIsPassVisible(!isPassVisible);
+  return (
+    <motion.div
+      key="step2"
+      initial={{ opacity: 0, x: 100 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.3 }}
+      className="flex flex-col gap-2 w-full"
+    >
+      <Input
+        isRequired
+        errorMessage="Please enter a strong password"
+        label="Password"
+        labelPlacement="inside"
+        description="Enter a strong password"
+        name="password"
+        type={isPassVisible ? 'text' : 'password'}
+        autoFocus={true}
+        endContent={
+          <button
+            aria-label="toggle password visibility"
+            className="focus:outline-none"
+            type="button"
+            onClick={togglePasswordVisibility}
+          >
+            {isPassVisible ? (
+              <EyeOffIcon className="text-2xl text-default-400 pointer-events-none" />
+            ) : (
+              <EyeIcon className="text-2xl text-default-400 pointer-events-none" />
+            )}
+          </button>
+        }
+      />
+      <Button fullWidth size="lg" type="submit" color="primary">
+        Validate password
+      </Button>
+    </motion.div>
+  );
+}
+
+function ConfirmPasswordComponent() {
+  const [isPassVisible, setIsPassVisible] = useState(false);
+
+  const togglePasswordVisibility = () => setIsPassVisible(!isPassVisible);
+  return (
+    <motion.div
+      key="step3"
+      initial={{ opacity: 0, x: 100 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.3 }}
+      className="flex flex-col gap-2 w-full"
+    >
+      <Input
+        isRequired
+        errorMessage="Please enter the same password"
+        label="Confirm password"
+        labelPlacement="inside"
+        description="Confirm your password"
+        name="confirm-password"
+        type={isPassVisible ? 'text' : 'password'}
+        autoFocus={true}
+        endContent={
+          <button
+            aria-label="toggle password visibility"
+            className="focus:outline-none"
+            type="button"
+            onClick={togglePasswordVisibility}
+          >
+            {isPassVisible ? (
+              <EyeOffIcon className="text-2xl text-default-400 pointer-events-none" />
+            ) : (
+              <EyeIcon className="text-2xl text-default-400 pointer-events-none" />
+            )}
+          </button>
+        }
+      />
+      <Button fullWidth size="lg" type="submit" color="primary">
+        Create account
+      </Button>
+    </motion.div>
   );
 }
