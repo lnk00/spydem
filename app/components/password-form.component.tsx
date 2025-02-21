@@ -1,4 +1,4 @@
-import { Button, Input } from '@heroui/react';
+import { Button, Input, Spinner } from '@heroui/react';
 import { motion } from 'framer-motion';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -10,6 +10,9 @@ type IProps = {
   name: string;
   buttonLabel: string;
   animationKey: string;
+  value: string;
+  onChange: (value: string) => void;
+  isLoading?: boolean;
 };
 
 export default function PasswordFormComponent({
@@ -19,6 +22,9 @@ export default function PasswordFormComponent({
   name,
   buttonLabel,
   animationKey,
+  value,
+  onChange,
+  isLoading = false,
 }: IProps) {
   const [isPassVisible, setIsPassVisible] = useState(false);
 
@@ -58,8 +64,17 @@ export default function PasswordFormComponent({
             )}
           </button>
         }
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
       />
-      <Button fullWidth size="lg" type="submit" color="primary">
+      <Button
+        fullWidth
+        size="lg"
+        type="submit"
+        color="primary"
+        isLoading={isLoading}
+        spinner={<Spinner size="sm" variant="spinner" color="white" />}
+      >
         {buttonLabel}
       </Button>
     </motion.div>

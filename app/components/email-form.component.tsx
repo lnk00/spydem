@@ -8,6 +8,8 @@ type IProps = {
   name: string;
   buttonLabel: string;
   animationKey: string;
+  value: string;
+  onChange: (value: string) => void;
 };
 
 export default function EmailFormComponent({
@@ -17,6 +19,8 @@ export default function EmailFormComponent({
   name,
   buttonLabel,
   animationKey,
+  value,
+  onChange,
 }: IProps) {
   return (
     <motion.div
@@ -38,6 +42,8 @@ export default function EmailFormComponent({
         description={description}
         name={name}
         type="email"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
       />
       <Button fullWidth size="lg" type="submit" color="primary">
         {buttonLabel}

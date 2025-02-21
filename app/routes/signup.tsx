@@ -15,6 +15,10 @@ export const Route = createFileRoute('/signup')({
 
 function RouteComponent() {
   const [step, setStep] = useState(1);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleBack = () => {
     if (step > 1) {
@@ -31,21 +35,19 @@ function RouteComponent() {
     } else {
       await authClient.signUp.email(
         {
-          email: 'damien.dumontet.perso@gmail.com',
-          password: 'password',
-          name: 'Damien Dumontet',
-          callbackURL: '/',
+          email,
+          password,
+          name: '',
         },
         {
           onRequest: (_ctx) => {
-            console.log('AUTH STARTED');
+            setIsLoading(true);
           },
           onSuccess: (_ctx) => {
-            console.log('AUTH SUCCEED');
-            //redirect to the dashboard or sign in page
+            setIsLoading(false);
           },
           onError: (ctx) => {
-            console.log('AUTH ERROR: ', ctx.error);
+            setIsLoading(false);
           },
         },
       );
@@ -99,6 +101,8 @@ function RouteComponent() {
                   label="Email"
                   name="email"
                   buttonLabel="Continue with email"
+                  value={email}
+                  onChange={(value) => setEmail(value)}
                 />
               )}
               {step === 2 && (
@@ -109,6 +113,8 @@ function RouteComponent() {
                   label="Password"
                   name="password"
                   buttonLabel="Validate password"
+                  value={password}
+                  onChange={(value) => setPassword(value)}
                 />
               )}
               {step === 3 && (
@@ -119,6 +125,9 @@ function RouteComponent() {
                   label="Confirm password"
                   name="confirm-password"
                   buttonLabel="Create account"
+                  value={confirm}
+                  onChange={(value) => setConfirm(value)}
+                  isLoading={isLoading}
                 />
               )}
             </AnimatePresence>
