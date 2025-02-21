@@ -1,4 +1,12 @@
-import { Button, Card, CardBody, Form, Image, Link } from '@heroui/react';
+import {
+  addToast,
+  Button,
+  Card,
+  CardBody,
+  Form,
+  Image,
+  Link,
+} from '@heroui/react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { ArrowLeftIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -48,7 +56,17 @@ function RouteComponent() {
             setIsLoading(false);
             navigate({ to: '/' as never });
           },
-          onError: (ctx) => {
+          onError: (_ctx) => {
+            addToast({
+              title: 'Sign up error',
+              description:
+                'You account is not created, if your already have an account go to sign in page.',
+              color: 'danger',
+            });
+            setPassword('');
+            setConfirm('');
+            setEmail('');
+            setStep(1);
             setIsLoading(false);
           },
         },
@@ -110,19 +128,25 @@ function RouteComponent() {
               {step === 2 && (
                 <PasswordFormComponent
                   animationKey="step2"
-                  errorMessage="Please enter a strong password"
                   description="Enter a strong password"
                   label="Password"
                   name="password"
                   buttonLabel="Validate password"
                   value={password}
                   onChange={(value) => setPassword(value)}
+                  validate={(value) => {
+                    if (value.length < 8) {
+                      return 'Password must be at least 8 characters long.';
+                    } else if (value.length > 35) {
+                      return 'Password must be less than 35 characters long.';
+                    }
+                    return null;
+                  }}
                 />
               )}
               {step === 3 && (
                 <PasswordFormComponent
                   animationKey="step3"
-                  errorMessage="Please enter the same password"
                   description="Confirm your password"
                   label="Confirm password"
                   name="confirm-password"
@@ -130,6 +154,12 @@ function RouteComponent() {
                   value={confirm}
                   onChange={(value) => setConfirm(value)}
                   isLoading={isLoading}
+                  validate={(value) => {
+                    if (value !== password) {
+                      return 'Confirm password must match your password.';
+                    }
+                    return null;
+                  }}
                 />
               )}
             </AnimatePresence>

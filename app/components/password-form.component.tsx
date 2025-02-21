@@ -4,7 +4,6 @@ import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import { useState } from 'react';
 
 type IProps = {
-  errorMessage: string;
   description: string;
   label: string;
   name: string;
@@ -13,10 +12,10 @@ type IProps = {
   value: string;
   onChange: (value: string) => void;
   isLoading?: boolean;
+  validate?: (value: string) => string | null;
 };
 
 export default function PasswordFormComponent({
-  errorMessage,
   description,
   label,
   name,
@@ -25,6 +24,7 @@ export default function PasswordFormComponent({
   value,
   onChange,
   isLoading = false,
+  validate,
 }: IProps) {
   const [isPassVisible, setIsPassVisible] = useState(false);
 
@@ -43,7 +43,6 @@ export default function PasswordFormComponent({
     >
       <Input
         isRequired
-        errorMessage={errorMessage}
         label={label}
         labelPlacement="inside"
         description={description}
@@ -66,6 +65,7 @@ export default function PasswordFormComponent({
         }
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        validate={validate}
       />
       <Button
         fullWidth

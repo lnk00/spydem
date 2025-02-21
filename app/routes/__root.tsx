@@ -6,7 +6,7 @@ import {
   Scripts,
 } from '@tanstack/react-router';
 import appCss from '~/styles/app.css?url';
-import { HeroUIProvider } from '@heroui/react';
+import { HeroUIProvider, ToastProvider } from '@heroui/react';
 
 export const Route = createRootRoute({
   head: () => ({
@@ -31,6 +31,7 @@ function RootComponent() {
   return (
     <RootDocument>
       <HeroUIProvider>
+        <ToastProvider placement="top-right" />
         <Outlet />
       </HeroUIProvider>
     </RootDocument>
