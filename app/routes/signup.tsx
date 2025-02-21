@@ -78,7 +78,7 @@ function RouteComponent() {
             </motion.div>
           </div>
           <Form className="w-96" onSubmit={onSubmit}>
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="wait" initial={false}>
               {step === 1 ? (
                 <EmailFormComponent
                   animationKey="step1"
