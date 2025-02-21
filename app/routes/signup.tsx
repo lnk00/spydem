@@ -1,5 +1,5 @@
 import { Button, Card, CardBody, Form, Image, Link } from '@heroui/react';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { ArrowLeftIcon } from 'lucide-react';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -19,6 +19,7 @@ function RouteComponent() {
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate({ from: '/signup' });
 
   const handleBack = () => {
     if (step > 1) {
@@ -45,6 +46,7 @@ function RouteComponent() {
           },
           onSuccess: (_ctx) => {
             setIsLoading(false);
+            navigate({ to: '/' as never });
           },
           onError: (ctx) => {
             setIsLoading(false);
