@@ -59,6 +59,8 @@ function RouteComponent() {
               description: `We could not sign you in, if you don't already have an account go to sign up page.`,
               color: 'danger',
               radius: 'none',
+              shouldShowTimeoutProgess: true,
+              variant: 'bordered',
             });
             setPassword('');
             setEmail('');
@@ -110,7 +112,7 @@ function RouteComponent() {
             </motion.div>
           </div>
           <Form className="w-96 relative" onSubmit={onSubmit}>
-            <AnimatePresence mode="popLayout" initial={false}>
+            <AnimatePresence mode="wait" initial={false}>
               {step === 1 && (
                 <EmailFormComponent
                   animationKey="step1"
