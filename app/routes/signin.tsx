@@ -12,6 +12,7 @@ import { ArrowLeftIcon } from 'lucide-react';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import GoogleLogo from '~/assets/images/google-logo.svg';
+import Logo from '~/assets/images/logo.svg';
 import EmailFormComponent from '~/components/email-form.component';
 import PasswordFormComponent from '~/components/password-form.component';
 import DividerFormComponent from '~/components/divider-form.component';
@@ -70,6 +71,7 @@ function RouteComponent() {
 
   return (
     <div className="container mx-auto h-screen flex flex-col gap-16 items-center justify-center">
+      <p className="font-display text-7xl text-default-200">spydem</p>
       <Card className="p-4">
         <CardBody className="flex flex-col gap-4 overflow-hidden">
           <div className="flex items-center gap-4 h-12">
