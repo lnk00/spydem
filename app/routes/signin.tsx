@@ -58,6 +58,7 @@ function RouteComponent() {
               title: 'Sign in error',
               description: `We could not sign you in, if you don't already have an account go to sign up page.`,
               color: 'danger',
+              radius: 'none',
             });
             setPassword('');
             setEmail('');

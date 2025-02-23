@@ -62,6 +62,7 @@ function RouteComponent() {
               description:
                 'You account is not created, if your already have an account go to sign in page.',
               color: 'danger',
+              radius: 'none',
             });
             setPassword('');
             setConfirm('');

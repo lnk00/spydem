@@ -27,51 +27,61 @@ function RouteComponent() {
   };
 
   return (
-    <div className="flex flex-col h-screen">
-      <div className="flex items-center h-14 border-y border-divider">
-        <div></div>
-        <div className="flex items-center ml-auto border-l border-divider h-full px-8 hover:bg-content2 cursor-pointer">
-          <Dropdown
-            classNames={{
-              content:
-                'rounded-none mt-1 shadow-none border-x border-b border-divider',
-            }}
-          >
-            <DropdownTrigger>
-              <User
-                avatarProps={{
-                  src: 'https://i.pravatar.cc/150?u=a04258114e29026302d',
-                  isBordered: true,
-                  size: 'sm',
-                }}
-                description="damien.dumontet.perso@gmail.com"
-                name="Damien Dumontet"
-                as="button"
-              />
-            </DropdownTrigger>
-            <DropdownMenu
-              variant="solid"
-              color="primary"
-              aria-label="Static Actions"
-            >
-              <DropdownItem
-                key="settings"
-                classNames={{ base: 'rounded-none' }}
-              >
-                Settings
-              </DropdownItem>
-              <DropdownItem
-                key="signout"
-                classNames={{ base: 'rounded-none' }}
-                onPress={handleSignout}
-              >
-                Sign out
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+    <div className="flex h-screen">
+      <div className="flex flex-col bg-default-50 h-full w-96 border-r border-divider">
+        <div className="flex items-center h-14 border-y border-divider">
+          <div className="flex items-center h-full px-8 border-r border-divider">
+            <p className="font-display text-lg">spydem</p>
+          </div>
         </div>
+        <div className="h-full"></div>
       </div>
-      <div className="h-full"></div>
+      <div className="flex flex-col h-full w-full">
+        <div className="flex items-center h-14 border-y border-divider">
+          <div></div>
+          <div className="flex items-center ml-auto border-l border-divider h-full px-8 hover:bg-content2 cursor-pointer">
+            <Dropdown
+              classNames={{
+                content:
+                  'rounded-none mt-1 shadow-none border-x border-b border-divider',
+              }}
+            >
+              <DropdownTrigger>
+                <User
+                  avatarProps={{
+                    src: 'https://i.pravatar.cc/150?u=a04258114e29026302d',
+                    isBordered: true,
+                    size: 'sm',
+                  }}
+                  description="damien.dumontet.perso@gmail.com"
+                  name="Damien Dumontet"
+                  as="button"
+                />
+              </DropdownTrigger>
+              <DropdownMenu
+                variant="solid"
+                color="primary"
+                aria-label="Static Actions"
+              >
+                <DropdownItem
+                  key="settings"
+                  classNames={{ base: 'rounded-none' }}
+                >
+                  Settings
+                </DropdownItem>
+                <DropdownItem
+                  key="signout"
+                  classNames={{ base: 'rounded-none' }}
+                  onPress={handleSignout}
+                >
+                  Sign out
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+        </div>
+        <div className="h-full"></div>
+      </div>
     </div>
   );
 }
