@@ -35,6 +35,7 @@ export default function EmailFormComponent({
       className="flex flex-col gap-2 w-full"
     >
       <Input
+        radius="none"
         isRequired
         errorMessage={errorMessage}
         label={label}
@@ -43,9 +44,10 @@ export default function EmailFormComponent({
         name={name}
         type="email"
         value={value}
+        variant="faded"
         onChange={(e) => onChange(e.target.value)}
       />
-      <Button fullWidth size="lg" type="submit" color="primary">
+      <Button fullWidth size="lg" type="submit" color="primary" radius="none">
         {buttonLabel}
       </Button>
     </motion.div>

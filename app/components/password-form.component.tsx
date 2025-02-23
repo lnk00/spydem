@@ -42,6 +42,7 @@ export default function PasswordFormComponent({
       className="flex flex-col gap-2 w-full"
     >
       <Input
+        radius="none"
         isRequired
         label={label}
         labelPlacement="inside"
@@ -66,6 +67,7 @@ export default function PasswordFormComponent({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         validate={validate}
+        variant="faded"
       />
       <Button
         fullWidth
@@ -74,6 +76,7 @@ export default function PasswordFormComponent({
         color="primary"
         isLoading={isLoading}
         spinner={<Spinner size="sm" variant="spinner" color="white" />}
+        radius="none"
       >
         {buttonLabel}
       </Button>
