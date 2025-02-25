@@ -1,26 +1,20 @@
-import { createFileRoute, redirect } from '@tanstack/react-router';
-import { createServerFn } from '@tanstack/start';
-import { getWebRequest } from '@tanstack/start/server';
-import { auth } from '~/lib/auth';
-
-export const getSession = createServerFn({ method: 'GET' }).handler(
-  async () => {
-    const request = getWebRequest();
-    const session = await auth.api.getSession({ headers: request!.headers });
-    return session;
-  },
-);
+import { createFileRoute, Outlet, useNavigate } from '@tanstack/react-router';
+import { useEffect } from 'react';
+import { authClient } from '~/lib/auth-client';
 
 export const Route = createFileRoute('/_protected')({
-  beforeLoad: async ({ location }) => {
-    const session = await getSession();
-    if (!session) {
-      throw redirect({
-        to: '/signin',
-        search: {
-          redirect: location.href,
-        },
-      });
-    }
-  },
+  component: RouteComponent,
 });
+
+function RouteComponent() {
+  const { data: session, isPending } = authClient.useSession();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!session && !isPending) {
+      navigate({ to: '/signin' });
+    }
+  }, [session, isPending]);
+
+  return <Outlet />;
+}
