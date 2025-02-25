@@ -14,7 +14,9 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as SignupImport } from './routes/signup'
 import { Route as SigninImport } from './routes/signin'
 import { Route as ProtectedImport } from './routes/_protected'
-import { Route as ProtectedIndexImport } from './routes/_protected/index'
+import { Route as ProtectedLayoutDashImport } from './routes/_protected/_layout-dash'
+import { Route as ProtectedLayoutDashIndexImport } from './routes/_protected/_layout-dash/index'
+import { Route as ProtectedLayoutDashSettingsImport } from './routes/_protected/_layout-dash/settings'
 
 // Create/Update Routes
 
@@ -35,11 +37,23 @@ const ProtectedRoute = ProtectedImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ProtectedIndexRoute = ProtectedIndexImport.update({
-  id: '/',
-  path: '/',
+const ProtectedLayoutDashRoute = ProtectedLayoutDashImport.update({
+  id: '/_layout-dash',
   getParentRoute: () => ProtectedRoute,
 } as any)
+
+const ProtectedLayoutDashIndexRoute = ProtectedLayoutDashIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ProtectedLayoutDashRoute,
+} as any)
+
+const ProtectedLayoutDashSettingsRoute =
+  ProtectedLayoutDashSettingsImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => ProtectedLayoutDashRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -66,24 +80,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupImport
       parentRoute: typeof rootRoute
     }
-    '/_protected/': {
-      id: '/_protected/'
+    '/_protected/_layout-dash': {
+      id: '/_protected/_layout-dash'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof ProtectedLayoutDashImport
+      parentRoute: typeof ProtectedImport
+    }
+    '/_protected/_layout-dash/settings': {
+      id: '/_protected/_layout-dash/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof ProtectedLayoutDashSettingsImport
+      parentRoute: typeof ProtectedLayoutDashImport
+    }
+    '/_protected/_layout-dash/': {
+      id: '/_protected/_layout-dash/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof ProtectedIndexImport
-      parentRoute: typeof ProtectedImport
+      preLoaderRoute: typeof ProtectedLayoutDashIndexImport
+      parentRoute: typeof ProtectedLayoutDashImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface ProtectedLayoutDashRouteChildren {
+  ProtectedLayoutDashSettingsRoute: typeof ProtectedLayoutDashSettingsRoute
+  ProtectedLayoutDashIndexRoute: typeof ProtectedLayoutDashIndexRoute
+}
+
+const ProtectedLayoutDashRouteChildren: ProtectedLayoutDashRouteChildren = {
+  ProtectedLayoutDashSettingsRoute: ProtectedLayoutDashSettingsRoute,
+  ProtectedLayoutDashIndexRoute: ProtectedLayoutDashIndexRoute,
+}
+
+const ProtectedLayoutDashRouteWithChildren =
+  ProtectedLayoutDashRoute._addFileChildren(ProtectedLayoutDashRouteChildren)
+
 interface ProtectedRouteChildren {
-  ProtectedIndexRoute: typeof ProtectedIndexRoute
+  ProtectedLayoutDashRoute: typeof ProtectedLayoutDashRouteWithChildren
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
-  ProtectedIndexRoute: ProtectedIndexRoute,
+  ProtectedLayoutDashRoute: ProtectedLayoutDashRouteWithChildren,
 }
 
 const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
@@ -91,16 +132,19 @@ const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
 )
 
 export interface FileRoutesByFullPath {
-  '': typeof ProtectedRouteWithChildren
+  '': typeof ProtectedLayoutDashRouteWithChildren
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
-  '/': typeof ProtectedIndexRoute
+  '/settings': typeof ProtectedLayoutDashSettingsRoute
+  '/': typeof ProtectedLayoutDashIndexRoute
 }
 
 export interface FileRoutesByTo {
+  '': typeof ProtectedRouteWithChildren
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
-  '/': typeof ProtectedIndexRoute
+  '/settings': typeof ProtectedLayoutDashSettingsRoute
+  '/': typeof ProtectedLayoutDashIndexRoute
 }
 
 export interface FileRoutesById {
@@ -108,15 +152,24 @@ export interface FileRoutesById {
   '/_protected': typeof ProtectedRouteWithChildren
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
-  '/_protected/': typeof ProtectedIndexRoute
+  '/_protected/_layout-dash': typeof ProtectedLayoutDashRouteWithChildren
+  '/_protected/_layout-dash/settings': typeof ProtectedLayoutDashSettingsRoute
+  '/_protected/_layout-dash/': typeof ProtectedLayoutDashIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/signin' | '/signup' | '/'
+  fullPaths: '' | '/signin' | '/signup' | '/settings' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/signin' | '/signup' | '/'
-  id: '__root__' | '/_protected' | '/signin' | '/signup' | '/_protected/'
+  to: '' | '/signin' | '/signup' | '/settings' | '/'
+  id:
+    | '__root__'
+    | '/_protected'
+    | '/signin'
+    | '/signup'
+    | '/_protected/_layout-dash'
+    | '/_protected/_layout-dash/settings'
+    | '/_protected/_layout-dash/'
   fileRoutesById: FileRoutesById
 }
 
@@ -150,7 +203,7 @@ export const routeTree = rootRoute
     "/_protected": {
       "filePath": "_protected.tsx",
       "children": [
-        "/_protected/"
+        "/_protected/_layout-dash"
       ]
     },
     "/signin": {
@@ -159,9 +212,21 @@ export const routeTree = rootRoute
     "/signup": {
       "filePath": "signup.tsx"
     },
-    "/_protected/": {
-      "filePath": "_protected/index.tsx",
-      "parent": "/_protected"
+    "/_protected/_layout-dash": {
+      "filePath": "_protected/_layout-dash.tsx",
+      "parent": "/_protected",
+      "children": [
+        "/_protected/_layout-dash/settings",
+        "/_protected/_layout-dash/"
+      ]
+    },
+    "/_protected/_layout-dash/settings": {
+      "filePath": "_protected/_layout-dash/settings.tsx",
+      "parent": "/_protected/_layout-dash"
+    },
+    "/_protected/_layout-dash/": {
+      "filePath": "_protected/_layout-dash/index.tsx",
+      "parent": "/_protected/_layout-dash"
     }
   }
 }

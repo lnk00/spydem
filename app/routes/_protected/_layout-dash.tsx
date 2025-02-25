@@ -4,17 +4,12 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  Link,
   User,
 } from '@heroui/react';
+import { Outlet } from '@tanstack/react-router';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import {
-  Building2,
-  GripIcon,
-  LayoutDashboardIcon,
-  PlusIcon,
-  SettingsIcon,
-  SquareKanbanIcon,
-} from 'lucide-react';
+import { GripIcon, PlusIcon, SettingsIcon } from 'lucide-react';
 import { authClient } from '~/lib/auth-client';
 
 export const Route = createFileRoute('/' as never)({
@@ -46,29 +41,38 @@ function RouteComponent() {
             <p className="">Dashboard</p>
           </div>
         </div>
-        <div className="flex flex-col gap-8 h-full p-8">
-          <div className="flex items-center justify-start gap-2">
-            <GripIcon className="w-6" />
-            <p>Dashboard</p>
+        <div className="flex flex-col h-full py-8">
+          <div className="flex flex-col gap-4 px-4">
+            <Link
+              className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-default-100 cursor-pointer"
+              onPress={() => navigate({ to: '/' as never })}
+            >
+              <GripIcon className="w-6" />
+              Dashboard
+            </Link>
+            <Link
+              className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-default-100 cursor-pointer"
+              onPress={() => navigate({ to: '/settings' })}
+            >
+              <SettingsIcon className="w-6" />
+              Spy settings
+            </Link>
           </div>
-          <div className="flex items-center justify-start gap-2">
-            <SettingsIcon className="w-6" />
-            <p>Spy settings</p>
-          </div>
-          <div className="flex items-center justify-start gap-2">
+          <div className="flex items-center justify-start gap-2 px-8 mt-8">
             <p className="text-default-400 text-md font-light">Companies</p>
           </div>
-
-          <Button
-            radius="none"
-            variant="solid"
-            color="primary"
-            size="lg"
-            className="mt-auto"
-            startContent={<PlusIcon className="w-6" />}
-          >
-            Add company
-          </Button>
+          <div className="mt-auto pt-8 border-t border-divider px-8">
+            <Button
+              radius="none"
+              variant="solid"
+              color="primary"
+              size="lg"
+              fullWidth
+              startContent={<PlusIcon className="w-6" />}
+            >
+              Add company
+            </Button>
+          </div>
         </div>
       </div>
       <div className="flex flex-col h-full w-full">
@@ -115,7 +119,9 @@ function RouteComponent() {
             </Dropdown>
           </div>
         </div>
-        <div className="h-full"></div>
+        <div className="h-full p-8">
+          <Outlet />
+        </div>
       </div>
     </div>
   );
