@@ -1,7 +1,17 @@
 import { Button, Input } from '@heroui/react';
 import { createFileRoute } from '@tanstack/react-router';
+import { createServerFn } from '@tanstack/start';
 import { ArrowRightIcon } from 'lucide-react';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
+import { crawl } from '~/lib/crawler';
+
+export const startCrawl = createServerFn({
+  method: 'GET',
+})
+  .validator((data: string) => data)
+  .handler(async (ctx) => {
+    await crawl(ctx.data);
+  });
 
 export const Route = createFileRoute('/' as never)({
   component: RouteComponent,
@@ -10,6 +20,11 @@ export const Route = createFileRoute('/' as never)({
 function RouteComponent() {
   const [companyName, setCompanyName] = useState('');
 
+  const handleSpy = async (e: FormEvent) => {
+    e.preventDefault();
+    startCrawl({ data: companyName });
+  };
+
   return (
     <div className="flex flex-col  h-full items-center justify-center">
       <div className="flex flex-col gap-16 max-w-[600px]">
@@ -17,7 +32,7 @@ function RouteComponent() {
           enter the name of the company you want to spy
         </h1>
 
-        <form className="flex items-center gap-4">
+        <form className="flex items-center gap-4" onSubmit={handleSpy}>
           <Input
             radius="none"
             label="company name"
