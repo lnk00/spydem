@@ -3,14 +3,40 @@ import { createFileRoute } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
 import { ArrowRightIcon } from 'lucide-react';
 import { FormEvent, useState } from 'react';
-import { crawl } from '~/lib/crawler';
+import { z } from 'zod';
+import { createNewStagehand } from '~/lib/stagehand';
 
 export const startCrawl = createServerFn({
   method: 'GET',
 })
   .validator((data: string) => data)
   .handler(async (ctx) => {
-    await crawl(ctx.data);
+    const { page, stagehand } = await createNewStagehand();
+
+    await page.goto('https://www.tella.com/');
+    await page.act('close the cookie banner');
+    await page.act('navigate to pricing section');
+
+    const plans = await page.extract({
+      instruction:
+        'extract the pricing plans of their services including name, price and currency',
+      schema: z.object({
+        plans: z.array(
+          z.object({
+            name: z.string(),
+            price: z.number(),
+            currency: z.string(),
+          }),
+        ),
+      }),
+      useTextExtract: true,
+    });
+
+    console.log(plans);
+
+    await stagehand.close();
+
+    return plans;
   });
 
 export const Route = createFileRoute('/' as never)({
@@ -22,7 +48,8 @@ function RouteComponent() {
 
   const handleSpy = async (e: FormEvent) => {
     e.preventDefault();
-    startCrawl({ data: companyName });
+    const plans = await startCrawl({ data: companyName });
+    console.log(plans);
   };
 
   return (
